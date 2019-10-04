@@ -10,7 +10,7 @@ let displayString = ""
 
 let numberOfWins = 0
 let numberOfLosses = 0
-let numberOfAttempts = 0
+let numberOfAttempts = 10
 let gameFinished = false
 
 function startGame() {
@@ -19,8 +19,8 @@ function startGame() {
     computerChosenSuperhero = superHeros[Math.floor(Math.random() * Math.floor(superHeros.length))]
 
     // After Creating display string, display thoese many underscores on the screen.
-    document.getElementById("GameString").innerHTML = getDisplayString(computerChosenSuperhero, "");
-    numberOfAttempts = 0
+    document.getElementById("GameString").textContent = getDisplayString(computerChosenSuperhero, "");
+    numberOfAttempts = 10
 }
 
 function finishGame(result) {
@@ -36,7 +36,6 @@ function finishGame(result) {
 
 //
 document.addEventListener("DOMContentLoaded", function (event) {
-    numberOfAttempts = 0
     startGame()
 })
 
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 function getDisplayString(superHero, userInput) {
     let string = displayString
     var displayStringIndex = 0
-    numberOfAttempts++;
     for (var i = 0; i < superHero.length; i++) {
         //if character is space then replace with 2 spaces else replace with _<space>{
         if (superHero[i].toUpperCase() !== userInput.toUpperCase()) {
@@ -54,13 +52,26 @@ function getDisplayString(superHero, userInput) {
         } else {
             if (string[displayStringIndex] !== userInput) {
                 string = string.replaceAt(displayStringIndex, userInput) + " "
-                numberOfAttempts--;
             }
         }
         displayStringIndex = displayStringIndex + 2;
         displayString = string;
     }
     return string;
+}
+
+function checkIfWonOrLost() {
+    if (displayString.replace(/ /g, "").toUpperCase() === computerChosenSuperhero.replace(/ /g, "").toUpperCase()) {
+        numberOfWins++
+        document.getElementById("wins").textContent = "Number of Wins: " + numberOfWins
+        finishGame(true)
+    } else if (numberOfAttempts == 0) {
+        numberOfLosses++
+        document.getElementById("losses").textContent = "Number of Losses: " + numberOfLosses
+        finishGame(false)
+    }
+    numberOfAttempts--;
+    document.getElementById("attempts").textContent = " Remaining Attempts: " + numberOfAttempts
 }
 
 document.onkeyup = function (event) {
@@ -74,18 +85,8 @@ document.onkeyup = function (event) {
         displayString = getDisplayString(computerChosenSuperhero, userPressedKey)
         displayStringIndex = displayStringIndex + 2;
     }
-    document.getElementById("GameString").innerHTML = displayString;
-    if (displayString.replace(/ /g, "").toUpperCase() === computerChosenSuperhero.replace(/ /g, "").toUpperCase()) {
-        numberOfWins++
-        alert("Congratulations!");
-        finishGame(true)
-    } else {
-        // if (numberOfAttempts > 5) {
-        //     numberOfLosses++
-        //     alert("Sorry better luck next time!");
-        //     startGame()
-        // }
-    }
+    document.getElementById("GameString").textContent = displayString;
+    checkIfWonOrLost()
 }
 
 String.prototype.replaceAt=function(index, replacement) {
