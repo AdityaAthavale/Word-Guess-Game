@@ -31,11 +31,7 @@ function finishGame(result) {
     }
     gameFinished = true
     displayString = ""
-    let elements = document.getElementsByClassName("letterTile")
-    for(let i = 0; i < elements.length; i++) {
-        let element = elements[i]
-        element.remove();
-    }
+    document.querySelectorAll('.letterTile').forEach(e => e.remove());
     startGame()
 }
 
@@ -81,20 +77,24 @@ function checkIfWonOrLost() {
 
 document.onkeyup = function (event) {
     let userPressedKey = event.key
+    //Ignore all keys except letters
+    if ((event.which <= 90 && event.which >= 65) || (event.which == 32)) {
 
-    let letterTile = document.createElement("h1")
-    letterTile.className = "letterTile"
-    letterTile.textContent = event.key.toUpperCase()
-    document.getElementById("guessedLetters").append(letterTile)
+        let letterTile = document.createElement("h1")
+        letterTile.className = "letterTile"
+        letterTile.textContent = event.key.toUpperCase()
+        document.getElementById("guessedLetters").append(letterTile)
 
-    //Now we need to find out if key pressed by user is present in superhero name.
-    var displayStringIndex = 0
-    for (var i = 0; i < computerChosenSuperhero.length; i++) {
-        displayString = getDisplayString(computerChosenSuperhero, userPressedKey)
-        displayStringIndex = displayStringIndex + 2;
+        //Now we need to find out if key pressed by user is present in superhero name.
+        var displayStringIndex = 0
+        for (var i = 0; i < computerChosenSuperhero.length; i++) {
+            displayString = getDisplayString(computerChosenSuperhero, userPressedKey)
+            displayStringIndex = displayStringIndex + 2;
+        }
+        //Update already used keys.
+        document.getElementById("GameString").textContent = displayString;
+        checkIfWonOrLost()
     }
-    document.getElementById("GameString").textContent = displayString;
-    checkIfWonOrLost()
 }
 
 String.prototype.replaceAt=function(index, replacement) {
