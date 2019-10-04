@@ -1,4 +1,4 @@
-const superHeros = ["Iron Man", "Super Man", "Spider Man", "Ant Man", "Thor", "Bat Man", "Hulk"]
+const superHeros = ["Iron Man", "Super Man", "Spider Man", "Ant Man", "Thor", "Bat Man", "Hulk", "Wonder Girl", "Wasp", "Captain America", "Vision", "Black Panther", "She Hulk", "Hawkeye", "Falcon", "War Machine", "Scarlet Witch", "Nebula", "Gamora", "Rocket", "Groot", "Doctor Strange", "Wong", "Captain Marvel", "Thanos"]
 
 let userPressedKey = ""
 
@@ -31,6 +31,11 @@ function finishGame(result) {
     }
     gameFinished = true
     displayString = ""
+    let elements = document.getElementsByClassName("letterTile")
+    for(let i = 0; i < elements.length; i++) {
+        let element = elements[i]
+        element.remove();
+    }
     startGame()
 }
 
@@ -77,7 +82,10 @@ function checkIfWonOrLost() {
 document.onkeyup = function (event) {
     let userPressedKey = event.key
 
-    document.getElementById("")
+    let letterTile = document.createElement("h1")
+    letterTile.className = "letterTile"
+    letterTile.textContent = event.key.toUpperCase()
+    document.getElementById("guessedLetters").append(letterTile)
 
     //Now we need to find out if key pressed by user is present in superhero name.
     var displayStringIndex = 0
